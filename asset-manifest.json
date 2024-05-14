@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/DevConnection-Redux-Json-Server-Project-/static/css/main.16017bfb.css",
+    "main.js": "/DevConnection-Redux-Json-Server-Project-/static/js/main.93c1c224.js",
+    "index.html": "/DevConnection-Redux-Json-Server-Project-/index.html",
+    "main.16017bfb.css.map": "/DevConnection-Redux-Json-Server-Project-/static/css/main.16017bfb.css.map",
+    "main.93c1c224.js.map": "/DevConnection-Redux-Json-Server-Project-/static/js/main.93c1c224.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.16017bfb.css",
+    "static/js/main.93c1c224.js"
+  ]
+}
