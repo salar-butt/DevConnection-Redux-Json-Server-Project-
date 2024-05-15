@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserNinja } from "react-icons/fa";
 import { BsLinkedin, BsFacebook, BsYoutube, BsInstagram } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { getSingleuser ,addUserProfile } from "../Redux/Actions/Action";
+import { getSingleuser, addUserProfile } from "../Redux/Actions/Action";
 
 const CreateProfile = () => {
-    const dispatch = useDispatch();
-    const {singleuser} = useSelector((state) => state.singleUser);
-    console.log(singleuser,"hiiiiii-single");
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user.id,"single user");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { singleuser } = useSelector((state) => state.singleUser);
+  const user = JSON.parse(localStorage.getItem('user'));
 
-    
-
-    useEffect(()=>{
-        dispatch(getSingleuser(user.id))
-    },[])
+  useEffect(() => {
+    if (user) {
+      dispatch(getSingleuser(user.id));
+    }
+  }, [dispatch, user]);
 
   const [showDiv, setShowDiv] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,53 +25,44 @@ const CreateProfile = () => {
     website: "",
     location: "",
     bio: "",
-    skills: [],
+    skills: "",
     linkedin: "",
     facebook: "",
     youtube: "",
     instagram: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "skills") {
-      const skillsArray = value.split(",").map((skill) => skill.trim());
-      setFormData((prevData) => ({ ...prevData, skills: skillsArray }));
-    } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
-    }
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleDivSHow = () => {
+  const handleDivShow = () => {
     setShowDiv(!showDiv);
   };
+
   const handleSubmit = () => {
-    console.log("Form Data:", formData);
-    const emptyFormData = {
-        profession: "",
-        company: "",
-        website: "",
-        location: "",
-        bio: "",
-        skills: [],
-        linkedin: "",
-        facebook: "",
-        youtube: "",
-        instagram: "",
-      };
-      setFormData(emptyFormData)
-      const updateData = {...singleuser,profile: formData}
-      console.log(updateData,"update");
-      dispatch(addUserProfile(user.id, updateData ))
+    const { profession, company, website, location, bio, skills } = formData;
+
+    // Check if any required field is empty
+    if (!profession || !company || !website || !location || !bio || !skills) {
+      alert("All fields are required.");
+      return;
+    }
+
+    const skillsArray = skills.split(",").map((skill) => skill.trim());
+    const updatedData = { ...singleuser, profile: { ...formData, skills: skillsArray } };
+    
+    dispatch(addUserProfile(user.id, updatedData));
+    
+    navigate("/dashboard");
   };
 
   return (
     <div>
       <Navbar />
       <div className="w-10/12 mx-auto py-5 flex flex-col">
-        <h1 className="text-5xl font-semibold text-blue-600">
-          Create Your Profile
-        </h1>
+        <h1 className="text-5xl font-semibold text-blue-600">Create Your Profile</h1>
         <h2 className="flex items-center gap-2 py-5 text-2xl">
           <FaUserNinja /> Let's get some information to make your profile
         </h2>
@@ -157,14 +147,14 @@ const CreateProfile = () => {
         <div className="flex gap-5 items-center pt-3">
           <button
             className="bg-blue-100 hover:bg-blue-600 hover:text-white  px-8 text-center py-1"
-            onClick={handleDivSHow}
+            onClick={handleDivShow}
           >
             Add Social Profile Links
           </button>
           <h1 className="text-gray-600">Optional</h1>
         </div>
         {showDiv && (
-          <div className=" flex flex-col gap-5 pt-5">
+          <div className="flex flex-col gap-5 pt-5">
             <div className="flex gap-5 items-center">
               <h1 className="text-3xl text-blue-600">
                 <BsLinkedin />
@@ -217,15 +207,13 @@ const CreateProfile = () => {
         )}
 
         <div className="flex gap-5 pt-5">
-        <Link to="/dashboard">
           <button className="bg-blue-600 w-fit px-6 py-2 text-white mt-5" onClick={handleSubmit}>
             Submit
           </button>
-        </Link>
           <Link to="/dashboard">
-          <button className="bg-blue-100 hover:bg-blue-600 hover:text-white w-fit px-6 py-2 text-black mt-5">
-            Go Back
-          </button>
+            <button className="bg-blue-100 hover:bg-blue-600 hover:text-white w-fit px-6 py-2 text-black mt-5">
+              Go Back
+            </button>
           </Link>
         </div>
       </div>

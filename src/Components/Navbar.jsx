@@ -20,7 +20,9 @@ const Navbar = () => {
           <span className="text-4xl">
             <DiNancy />
           </span>
+        <Link to="/">
           DevConnections
+          </Link>
         </h1>
       </div>
 

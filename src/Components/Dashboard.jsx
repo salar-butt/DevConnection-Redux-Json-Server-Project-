@@ -16,8 +16,8 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const { singleuser } = useSelector((state) => state.singleUser);
-  console.log(singleuser, "profile");
-  console.log(singleuser, "hiiiiiiiiiiiiiiiiiiii");
+  // console.log(singleuser, "profile");
+  // console.log(singleuser, "hiiiiiiiiiiiiiiiiiiii");
 
   // console.log(experience,"exp");
 

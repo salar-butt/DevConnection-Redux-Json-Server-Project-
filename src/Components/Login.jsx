@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import { loginUser } from "../Redux/Actions/Action";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" , succes:false});
-  const dispatch = useDispatch()
-  const nevigate = useNavigate()
-   const {succes} = useSelector((state) => state.loginUser)
-    console.log(succes,"1st");
-
- 
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { success } = useSelector((state) => state.loginUser);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,37 +17,35 @@ const Login = () => {
 
   const handleSubmit = () => {
     const { email, password } = formData;
-    const user = localStorage.getItem("user")
 
-    if(user !== null){
-        localStorage.clear("user")
-        dispatch(loginUser(email, password));
-    }
-    else{
-        dispatch(loginUser(email, password));
-
+    // Check if any field is empty
+    if (!email || !password) {
+      alert("All fields are required.");
+      return;
     }
 
-     setTimeout(() => {
-        checkLogedUser()
-     }, 1000);
-  }
+    const user = localStorage.getItem("user");
 
-
-  const checkLogedUser=()=>{
-
-    const user=localStorage.getItem("user")
-    console.log(user, 'user local');
-
-    if(user !==null){
-        nevigate("/dashboard")
-    }else{
-        alert("you can't login")
+    if (user !== null) {
+      localStorage.removeItem("user");
     }
-  }
 
+    dispatch(loginUser(email, password));
 
+    setTimeout(() => {
+      checkLoggedUser();
+    }, 1000);
+  };
 
+  const checkLoggedUser = () => {
+    const user = localStorage.getItem("user");
+
+    if (user !== null) {
+      navigate("/dashboard");
+    } else {
+      alert("You can't login");
+    }
+  };
 
   return (
     <div>

@@ -1,22 +1,25 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { FaUserNinja } from "react-icons/fa";
-// import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { postUserData } from "../Redux/Actions/Action";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [developerData, setDeveloperData] = useState({
+  const initialState ={
     name: "",
     email: "",
     username: "",
     avatar: "",
     password: "",
     confirmPassword: ""
-  });
+  }
+
+  const [developerData, setDeveloperData] = useState(initialState);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,16 +30,29 @@ const SignUp = () => {
   };
 
   const handleSubmit = () => {
+    const { name, email, username, avatar, password, confirmPassword } = developerData;
+
+    // Check if any field is empty
+    if (!name || !email || !username || !avatar || !password || !confirmPassword) {
+      alert("All fields are required.");
+      return;
+    }
+
+    // Check if password and confirmPassword match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+    }
+else{
+  navigate("/login");
+}
+    // Dispatch the action to post user data
     dispatch(postUserData(developerData));
-    setDeveloperData({
-      name: "",
-      email: "",
-      username: "",
-      avatar: "",
-      password: "",
-      confirmPassword: ""
-    });
-    console.log(developerData, "hiiiiii");
+
+    // Reset the form fields
+    setDeveloperData(initialState);
+
+    // Navigate to the login page
+    
   };
 
   return (
@@ -115,18 +131,16 @@ const SignUp = () => {
           value={developerData.confirmPassword}
           onChange={handleChange}
         />
-        <Link to="/login">
         <button
           className="bg-blue-600 w-fit px-6 py-2 text-white mt-5"
           onClick={handleSubmit}
         >
           Register
         </button>
-        </Link>
         <h1 className="text-lg pt-3">
           Already Have an Account?
           <Link to="/login">
-            <span className="text-blue-600">Sign In</span>
+            <span className="text-blue-600"> Sign In</span>
           </Link>
         </h1>
       </div>
