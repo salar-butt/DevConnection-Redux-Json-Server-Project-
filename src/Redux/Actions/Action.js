@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const baseUrl = json-api-xrl5.onrender.com
+const baseUrl = "https://json-api-xrl5.onrender.com"
 
 export const postUserData = (object) => async(dispatch) => {
     try {
